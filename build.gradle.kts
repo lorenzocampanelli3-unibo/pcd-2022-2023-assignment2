@@ -21,9 +21,9 @@ tasks.test {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.addAll(listOf("--enable-preview"))
+    options.compilerArgs.add("--enable-preview")
 }
 
 tasks.withType<JavaExec>().configureEach {
-    jvmArgs = listOf("--enable-preview")
+    jvmArgs("--enable-preview")
 }
