@@ -37,7 +37,7 @@ public class AnalysisStats {
 			maxLocSources.clear();
 			Arrays.fill(bands, 0);
 			nSrcProcessed = 0;
-			nFoldersProcessed = 1;
+			nFoldersProcessed = 0;
 		} finally {
 			lock.unlock();
 		}

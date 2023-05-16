@@ -12,7 +12,7 @@ public class SourceAnalysisService implements SourceAnalyser {
 
 //    private static final int N_WORKERS = Runtime.getRuntime().availableProcessors() * 4;
     private static final long STATS_UPDATE_PERIOD = 50;
-    private ExecutorService executor;
+//    private ExecutorService executor;
     private ScheduledExecutorService scheduledExecutorService;
 
     private Flag stopFlag;
@@ -21,7 +21,6 @@ public class SourceAnalysisService implements SourceAnalyser {
     private List<AnalysisUpdateListener> listeners;
 
     public SourceAnalysisService() {
-        this.executor = Executors.newVirtualThreadPerTaskExecutor();
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.stopFlag = new AtomicBooleanFlag();
         this.isShutDown = new AtomicBooleanFlag();
@@ -33,8 +32,11 @@ public class SourceAnalysisService implements SourceAnalyser {
         if (isShutDown.isSet()) {
             throw new IllegalStateException("Service is shut down.");
         }
+        stopFlag.reset();
         AnalysisStats stats = new AnalysisStats(rootDir, maxSourcesToTrack, nBands, maxLoC);
-        return executor.submit(new MasterTask(rootDir, extensions, stats, executor, stopFlag));
+        CompletableFuture<AnalysisReport> reportFuture = new CompletableFuture<>();
+        new VTMasterAgent(rootDir, extensions, stats, stopFlag, reportFuture).start();
+        return reportFuture;
     }
 
     @Override
@@ -43,22 +45,19 @@ public class SourceAnalysisService implements SourceAnalyser {
             throw new IllegalStateException("Service is shut down.");
         }
         stopFlag.reset();
-       AnalysisStats stats = new AnalysisStats(rootDir, maxSourcesToTrack, nBands, maxLoC);
-        Path rootDirPath = Paths.get(rootDir);
-        SrcDiscoveryTask srcDiscoveryTask = new SrcDiscoveryTask(rootDir, extensions, stats, executor, stopFlag);
+        AnalysisStats stats = new AnalysisStats(rootDir, maxSourcesToTrack, nBands, maxLoC);
         UpdateTask updateTask = new UpdateTask(stats, listeners);
         ScheduledFuture<?> updateTaskFuture = scheduledExecutorService.scheduleAtFixedRate(updateTask, 0, STATS_UPDATE_PERIOD, TimeUnit.MILLISECONDS);
-        Future<AnalysisReport> analysisFuture = executor.submit(new SrcDiscoveryTask(rootDir, extensions, stats, executor, stopFlag));
         new Thread(() -> {
                     try {
-                       AnalysisReport report = analysisFuture.get();
+                       AnalysisReport report = getReport(rootDir, extensions, maxSourcesToTrack, nBands, maxLoC).get();
                         updateTaskFuture.cancel(false);
-                        boolean completedSuccessfully = !stopFlag.isSet();
-                        listeners.forEach(l -> l.analysisCompleted(completedSuccessfully, report));
+                        boolean wasStopped = !stopFlag.isSet();
+                        listeners.forEach(l -> l.analysisCompleted(wasStopped, report));
                     } catch (InterruptedException | ExecutionException e) {
                         throw new RuntimeException(e);
                     }
-                }, "AnalysisCompletionWaiter").start();
+                }, "CompletionWaiterAgent").start();
     }
 
     public void addListener(AnalysisUpdateListener listener) {
@@ -77,12 +76,11 @@ public class SourceAnalysisService implements SourceAnalyser {
         this.stopFlag.set();
         this.isShutDown.set();
         try {
-            this.executor.shutdown();
             this.scheduledExecutorService.shutdown();
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
             scheduledExecutorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 }

@@ -14,6 +14,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("com.jgoodies:jgoodies-common:1.8.1")
     implementation("com.jgoodies:jgoodies-forms:1.9.0")
+    implementation("io.vertx:vertx-core:4.4.2")
 }
 
 tasks.test {

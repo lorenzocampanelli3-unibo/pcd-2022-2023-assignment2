@@ -34,7 +34,7 @@ public class CLILauncher {
             report.dumpTopFilesRanking();
             report.dumpDistribution();
             System.out.println("Elapsed time: " + report.getElapsedTime() + " ms.");
-            sourceAnalysisService.shutdown();
+//            sourceAnalysisService.shutdown();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }

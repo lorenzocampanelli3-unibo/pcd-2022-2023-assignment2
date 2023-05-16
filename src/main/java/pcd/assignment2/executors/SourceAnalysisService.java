@@ -50,8 +50,8 @@ public class SourceAnalysisService implements SourceAnalyser {
                     try {
                         AnalysisReport report = analysisFuture.get();
                         updateTaskFuture.cancel(false);
-                        boolean completedSuccessfully = !stopFlag.isSet();
-                        listeners.forEach(l -> l.analysisCompleted(completedSuccessfully, report));
+                        boolean wasStopped = !stopFlag.isSet();
+                        listeners.forEach(l -> l.analysisCompleted(wasStopped, report));
                     } catch (InterruptedException | ExecutionException e) {
                         throw new RuntimeException(e);
                     }

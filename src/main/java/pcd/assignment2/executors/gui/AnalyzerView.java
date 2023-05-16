@@ -37,12 +37,12 @@ public class AnalyzerView implements AnalysisUpdateListener {
     }
 
     @Override
-    public void analysisCompleted(boolean completedSuccessfully, AnalysisReport report) {
+    public void analysisCompleted(boolean wasStopped, AnalysisReport report) {
         lock.lock();
         try {
             AnalysisStatsSnapshot snapshot = report.getSnapshot();
             ui.updateStats(snapshot);
-            if (completedSuccessfully) {
+            if (wasStopped) {
                 ui.updateStatus("Analysis completed.");
             } else {
                 ui.updateStatus("Analysis interrupted by the user.");
