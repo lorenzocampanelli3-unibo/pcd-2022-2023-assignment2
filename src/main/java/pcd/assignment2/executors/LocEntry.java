@@ -7,7 +7,7 @@ public class LocEntry {
 	
 	private int nLoc;
 	
-	LocEntry(String srcFullPath, String srcPathRelativeToRoot,  int nLoc){
+	public LocEntry(String srcFullPath, String srcPathRelativeToRoot,  int nLoc){
 		this.srcFullPath = srcFullPath;
 		this.srcPathRelativeToRoot = srcPathRelativeToRoot;
 		this.nLoc = nLoc;

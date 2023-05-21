@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class SourceAnalysisService implements SourceAnalyser {
+public class SourceAnalysisService implements SourceAnalyserVT {
 
 //    private static final int N_WORKERS = Runtime.getRuntime().availableProcessors() * 4;
     private static final long STATS_UPDATE_PERIOD = 50;

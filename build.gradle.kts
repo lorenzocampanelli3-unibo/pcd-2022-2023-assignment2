@@ -15,6 +15,7 @@ dependencies {
     implementation("com.jgoodies:jgoodies-common:1.8.1")
     implementation("com.jgoodies:jgoodies-forms:1.9.0")
     implementation("io.vertx:vertx-core:4.4.2")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.6")
 }
 
 tasks.test {
