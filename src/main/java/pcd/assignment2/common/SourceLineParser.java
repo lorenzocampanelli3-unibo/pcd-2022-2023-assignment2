@@ -1,4 +1,4 @@
-package pcd.assignment2.eventloop;
+package pcd.assignment2.common;
 
 public class SourceLineParser {
     private boolean parsingMultipleLinesBlockComment;

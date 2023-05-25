@@ -1,5 +1,8 @@
 package pcd.assignment2.executors;
 
+import pcd.assignment2.common.AnalysisStatsSnapshot;
+import pcd.assignment2.common.AnalysisUpdateListener;
+
 import java.util.List;
 
 public class UpdateTask implements Runnable{

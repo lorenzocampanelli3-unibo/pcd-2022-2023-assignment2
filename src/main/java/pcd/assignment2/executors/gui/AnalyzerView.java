@@ -1,8 +1,10 @@
 package pcd.assignment2.executors.gui;
 
-import pcd.assignment2.executors.AnalysisReport;
-import pcd.assignment2.executors.AnalysisStatsSnapshot;
-import pcd.assignment2.executors.AnalysisUpdateListener;
+import pcd.assignment2.common.AnalysisReport;
+import pcd.assignment2.common.AnalysisStatsSnapshot;
+import pcd.assignment2.common.AnalysisUpdateListener;
+import pcd.assignment2.common.gui.AnalyzerUI;
+import pcd.assignment2.common.gui.InputListener;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

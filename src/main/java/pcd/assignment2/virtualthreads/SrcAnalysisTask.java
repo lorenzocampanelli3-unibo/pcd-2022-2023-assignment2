@@ -1,14 +1,12 @@
 package pcd.assignment2.virtualthreads;
 
+import pcd.assignment2.common.SourceLineParser;
 import pcd.assignment2.executors.AnalysisStats;
-import pcd.assignment2.executors.Flag;
-import pcd.assignment2.executors.SourceAnalysisLib;
+import pcd.assignment2.common.Flag;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 public class SrcAnalysisTask implements Runnable {

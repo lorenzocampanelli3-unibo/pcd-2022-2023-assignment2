@@ -1,5 +1,8 @@
 package pcd.assignment2.executors;
 
+import pcd.assignment2.common.AnalysisReport;
+import pcd.assignment2.common.Flag;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Iterator;

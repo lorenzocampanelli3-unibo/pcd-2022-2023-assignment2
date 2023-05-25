@@ -1,4 +1,4 @@
-package pcd.assignment2.eventloop;
+package pcd.assignment2.common;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

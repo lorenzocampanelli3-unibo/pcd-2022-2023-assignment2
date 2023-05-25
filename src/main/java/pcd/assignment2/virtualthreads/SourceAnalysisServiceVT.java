@@ -1,6 +1,9 @@
 package pcd.assignment2.virtualthreads;
 
-import pcd.assignment2.executors.SourceAnalyser;
+import pcd.assignment2.common.AnalysisReport;
+import pcd.assignment2.common.AnalysisUpdateListener;
+import pcd.assignment2.common.AtomicBooleanFlag;
+import pcd.assignment2.common.Flag;
 import pcd.assignment2.executors.*;
 
 import java.nio.file.Path;
@@ -8,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class SourceAnalysisService implements SourceAnalyserVT {
+public class SourceAnalysisServiceVT implements SourceAnalyserVT {
 
 //    private static final int N_WORKERS = Runtime.getRuntime().availableProcessors() * 4;
     private static final long STATS_UPDATE_PERIOD = 50;
@@ -20,7 +23,7 @@ public class SourceAnalysisService implements SourceAnalyserVT {
 
     private List<AnalysisUpdateListener> listeners;
 
-    public SourceAnalysisService() {
+    public SourceAnalysisServiceVT() {
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.stopFlag = new AtomicBooleanFlag();
         this.isShutDown = new AtomicBooleanFlag();

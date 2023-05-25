@@ -1,8 +1,8 @@
 package pcd.assignment2.virtualthreads;
 
-import pcd.assignment2.executors.AnalysisReport;
+import pcd.assignment2.common.AnalysisReport;
 import pcd.assignment2.executors.AnalysisStats;
-import pcd.assignment2.executors.Flag;
+import pcd.assignment2.common.Flag;
 
 import java.nio.file.Path;
 import java.util.Queue;

@@ -1,4 +1,4 @@
-package pcd.assignment2.executors;
+package pcd.assignment2.reactive;
 
 import pcd.assignment2.common.AnalysisStatsSnapshot;
 import pcd.assignment2.common.LocEntry;
@@ -31,7 +31,7 @@ public class AnalysisStats {
 		bands = new int[nBands];
 		Arrays.fill(bands, 0);
 		nSrcProcessed = 0;
-		nFoldersProcessed = 1;
+		nFoldersProcessed = 0;
 	}
 	
 	public void clear() {

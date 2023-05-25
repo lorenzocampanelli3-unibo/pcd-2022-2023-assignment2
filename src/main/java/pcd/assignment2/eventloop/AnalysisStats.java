@@ -1,14 +1,12 @@
 package pcd.assignment2.eventloop;
 
-import pcd.assignment2.executors.AnalysisStatsSnapshot;
-import pcd.assignment2.executors.LocEntry;
+import pcd.assignment2.common.AnalysisStatsSnapshot;
+import pcd.assignment2.common.LocEntry;
 
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class AnalysisStats {
 

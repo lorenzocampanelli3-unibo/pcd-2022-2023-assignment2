@@ -1,6 +1,6 @@
 package pcd.assignment2.virtualthreads;
 
-import pcd.assignment2.executors.AnalysisReport;
+import pcd.assignment2.common.AnalysisReport;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,7 +27,7 @@ public class CLILauncher {
         }
         System.out.println("Starting with params:\n" +
                 "rootDir = " + D + ", NI: " + NI + ", MAXL: " + MAXL + ", topN: " + topN);
-        SourceAnalysisService sourceAnalysisService = new SourceAnalysisService();
+        SourceAnalysisServiceVT sourceAnalysisService = new SourceAnalysisServiceVT();
         Future<AnalysisReport> reportFuture = sourceAnalysisService.getReport(rootDir, new String[]{"java", "c", "h"},  topN, NI, MAXL);
         try {
             AnalysisReport report = reportFuture.get();

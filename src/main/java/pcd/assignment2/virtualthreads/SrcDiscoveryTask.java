@@ -1,17 +1,12 @@
 package pcd.assignment2.virtualthreads;
 
 import pcd.assignment2.executors.AnalysisStats;
-import pcd.assignment2.executors.Flag;
+import pcd.assignment2.common.Flag;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class SrcDiscoveryTask implements Runnable {
 

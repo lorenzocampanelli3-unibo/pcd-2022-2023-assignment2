@@ -1,4 +1,4 @@
-package pcd.assignment2.executors;
+package pcd.assignment2.common;
 
 public class AnalysisStatsSnapshot {
 	

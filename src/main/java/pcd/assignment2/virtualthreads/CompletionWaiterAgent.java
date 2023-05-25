@@ -1,7 +1,7 @@
 package pcd.assignment2.virtualthreads;
 
-import pcd.assignment2.executors.AnalysisUpdateListener;
-import pcd.assignment2.executors.Flag;
+import pcd.assignment2.common.AnalysisUpdateListener;
+import pcd.assignment2.common.Flag;
 
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;

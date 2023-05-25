@@ -4,6 +4,9 @@ import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import pcd.assignment2.common.AnalysisReport;
+import pcd.assignment2.common.Flag;
+import pcd.assignment2.common.SourceLineParser;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -16,12 +19,12 @@ public class SourceAnalyserLib implements SourceAnalyser {
     private Vertx vertx;
     private Flag stopFlag;
 
-    private SourceLineParser parser;
+//    private SourceLineParser parser;
 
     public SourceAnalyserLib(Vertx vertx, Flag stopFlag) {
         this.vertx = vertx;
         this.stopFlag = stopFlag;
-        this.parser = new SourceLineParser();
+//        this.parser = new SourceLineParser();
     }
 
     @Override
@@ -30,7 +33,7 @@ public class SourceAnalyserLib implements SourceAnalyser {
         AnalysisStats stats = new AnalysisStats(rootDir, maxSourcesToTrack, nBands, maxLoC);
         PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:**.{" + String.join(",", extensions) + "}");
         long t0 = System.currentTimeMillis();
-        explore(rootDir, matcher, stats)
+        exploreForReport(rootDir, matcher, stats)
                 .onSuccess(h -> {
                         long t1 = System.currentTimeMillis();
                         promise.complete(new AnalysisReport(stats.getSnapshot(), (t1-t0)));
@@ -39,7 +42,17 @@ public class SourceAnalyserLib implements SourceAnalyser {
         return promise.future();
     }
 
-    private Future<Void> explore(Path directory, PathMatcher matcher, AnalysisStats stats) {
+    @Override
+    public Future<Void> analyseSources(Path rootDir, String[] extensions, String address) {
+        Promise<Void> promise = Promise.promise();
+        PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:**.{" + String.join(",", extensions) + "}");
+        Notifier notifier = new Notifier(vertx, address);
+        vertx.deployVerticle(new SourceAnalyserVerticle(rootDir, matcher, notifier/*, parser*/, promise, vertx, stopFlag));
+        return promise.future();
+    }
+
+
+    private Future<Void> exploreForReport(Path directory, PathMatcher matcher, AnalysisStats stats) {
         Promise<Void> promise = Promise.promise();
         List<Future> futList = new ArrayList<>();
         var fs = vertx.fileSystem();
@@ -50,7 +63,7 @@ public class SourceAnalyserLib implements SourceAnalyser {
             for (String p : l) {
                 Path path = Paths.get(p);
                 if (Files.isDirectory(path)) {
-                    Future<Void> futExp = explore(path, matcher, stats);
+                    Future<Void> futExp = exploreForReport(path, matcher, stats);
                     futList.add(futExp);
                 } else if (Files.isRegularFile(path) && matcher.matches(path)) {
                     Future<Long> futNLines = asyncGetFileNumLines(path);
@@ -65,7 +78,10 @@ public class SourceAnalyserLib implements SourceAnalyser {
         return promise.future();
     }
 
+
+
     private Future<Long> asyncGetFileNumLines(Path path) {
+        SourceLineParser parser = new SourceLineParser();
         return vertx.executeBlocking(p -> {
             try (Stream<String> stream = Files.lines(path)) {
                 long nLines = stream.filter(l -> parser.parseLine(l)).count();
@@ -75,4 +91,5 @@ public class SourceAnalyserLib implements SourceAnalyser {
             }
         });
     }
+
 }

@@ -1,9 +1,11 @@
 package pcd.assignment2.executors;
 
+import pcd.assignment2.common.AnalysisReport;
+
 import java.nio.file.Path;
 import java.util.concurrent.Future;
 
-public interface SourceAnalyser {
+public interface SourceAnalyserExec {
     /**
      *
      * @param rootDir the starting directory

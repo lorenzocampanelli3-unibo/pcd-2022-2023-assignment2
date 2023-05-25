@@ -1,4 +1,4 @@
-package pcd.assignment2.executors.gui;
+package pcd.assignment2.common.gui;
 
 public interface InputListener {
 

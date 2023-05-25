@@ -2,12 +2,12 @@
  * Created by JFormDesigner on Tue Apr 11 21:23:00 CEST 2023
  */
 
-package pcd.assignment2.executors.gui;
+package pcd.assignment2.common.gui;
 
 import com.jgoodies.forms.factories.CC;
 import com.jgoodies.forms.layout.FormLayout;
-import pcd.assignment2.executors.AnalysisStatsSnapshot;
-import pcd.assignment2.executors.LocEntry;
+import pcd.assignment2.common.AnalysisStatsSnapshot;
+import pcd.assignment2.common.LocEntry;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;

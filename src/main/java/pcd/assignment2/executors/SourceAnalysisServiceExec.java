@@ -1,11 +1,16 @@
 package pcd.assignment2.executors;
 
+import pcd.assignment2.common.AnalysisReport;
+import pcd.assignment2.common.AnalysisUpdateListener;
+import pcd.assignment2.common.AtomicBooleanFlag;
+import pcd.assignment2.common.Flag;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class SourceAnalysisService implements SourceAnalyser {
+public class SourceAnalysisServiceExec implements SourceAnalyserExec {
 
 //    private static final int N_WORKERS = Runtime.getRuntime().availableProcessors() * 4;
     private static final long STATS_UPDATE_PERIOD = 50;
@@ -17,7 +22,7 @@ public class SourceAnalysisService implements SourceAnalyser {
 
     private List<AnalysisUpdateListener> listeners;
 
-    public SourceAnalysisService(int nWorkers) {
+    public SourceAnalysisServiceExec(int nWorkers) {
         this.executor = Executors.newFixedThreadPool(nWorkers);
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         this.stopFlag = new AtomicBooleanFlag();
