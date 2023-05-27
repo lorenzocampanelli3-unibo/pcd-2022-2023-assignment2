@@ -1,27 +1,37 @@
 package pcd.assignment2.reactive;
 
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import pcd.assignment2.common.AtomicBooleanFlag;
+import pcd.assignment2.common.Flag;
 
 import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
 
 public class TestReactive {
     public static void main(String[] args) throws InterruptedException {
-        String testPath = "E:\\linux-master";
-        int maxSourcesToTrack = 15;
-        int nBands = 21;
-        int maxLoC = 5000;
-        SourceAnalyserLib lib = new SourceAnalyserLib();
-        lib.getReport(Paths.get(testPath), new String[]{"java", "c", "h"}, maxSourcesToTrack, nBands, maxLoC)
-                .subscribe(r -> {
-                    r.dumpTopFilesRanking();
-                    r.dumpDistribution();
-                    System.out.println("# dirs: " + r.getSnapshot().getNumDirectoriesProcessed());
-                    System.out.println("# files: " + r.getSnapshot().getNumSourcesProcessed());
-                    System.out.println("Elapsed time: " + r.getElapsedTime() + "ms.");
+//        String testPath = "E:\\linux-master";
+//        int maxSourcesToTrack = 15;
+//        int nBands = 21;
+//        int maxLoC = 5000;
+//        SourceAnalyserLib lib = new SourceAnalyserLib();
+//        lib.getReport(Paths.get(testPath), new String[]{"java", "c", "h"}, maxSourcesToTrack, nBands, maxLoC)
+//                .subscribe(r -> {
+//                    r.dumpTopFilesRanking();
+//                    r.dumpDistribution();
+//                    System.out.println("# dirs: " + r.getSnapshot().getNumDirectoriesProcessed());
+//                    System.out.println("# files: " + r.getSnapshot().getNumSourcesProcessed());
+//                    System.out.println("Elapsed time: " + r.getElapsedTime() + "ms.");
+//                });
+
+        String testPath = "E:\\TestFolder3";
+        Flag stopFlag = new AtomicBooleanFlag();
+        SourceAnalyserRxLib lib = new SourceAnalyserRxLib(stopFlag);
+        var disposable = lib.analyseSources(Paths.get(testPath), new String[]{"java", "c", "h"})
+                .subscribe(ev -> {
+                    log("handler executed.");
+                    System.out.println("> " + ev);
                 });
 
+        Thread.sleep(1000);
+//        stopFlag.set();
 //        System.out.println("Before subscribe");
 //        System.out.println("Before Thread: " + Thread.currentThread());
 //
@@ -53,5 +63,9 @@ public class TestReactive {
 //
 //        System.out.println("After blockingSubscribe");
 //        System.out.println("After Thread: " + Thread.currentThread());
+    }
+
+    static private void log(String msg) {
+        System.out.println("[" + Thread.currentThread().getName() + "] " + msg);
     }
 }

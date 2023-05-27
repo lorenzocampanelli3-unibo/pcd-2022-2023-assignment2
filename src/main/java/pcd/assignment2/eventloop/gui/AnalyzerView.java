@@ -12,7 +12,7 @@ public class AnalyzerView implements AnalysisUpdateListener {
     private AnalyzerUI ui;
 
     public AnalyzerView(String defRootDir, int defMaxLoC, int defNBands, int defNTopFiles) {
-        this.ui = new AnalyzerUI(defRootDir, defMaxLoC, defNBands, defNTopFiles, 4, false);
+        this.ui = new AnalyzerUI("Event Loop", defRootDir, defMaxLoC, defNBands, defNTopFiles, 4, false);
     }
 
     public void addListener(InputListener listener) {

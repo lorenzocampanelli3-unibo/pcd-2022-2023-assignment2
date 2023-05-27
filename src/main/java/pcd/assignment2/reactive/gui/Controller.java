@@ -4,7 +4,7 @@ import io.vertx.core.Vertx;
 import pcd.assignment2.common.AtomicBooleanFlag;
 import pcd.assignment2.common.Flag;
 import pcd.assignment2.common.gui.InputListener;
-import pcd.assignment2.eventloop.AnalysisAgent;
+import pcd.assignment2.reactive.AnalysisAgent;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,9 +28,8 @@ public class Controller implements InputListener {
 
     public void started(String selectedDirPath, int maxFiles, int nBands, int maxLoc) {
         Path rootDir = Paths.get(selectedDirPath);
-        String address = "analysis-data";
         this.view.updateStatus("Processing...");
-        vertx.deployVerticle(new AnalysisAgent(rootDir, maxFiles, nBands, maxLoc, address, stopFlag, view));
+        vertx.deployVerticle(new AnalysisAgent(rootDir, maxFiles, nBands, maxLoc, stopFlag, view));
     }
 
     public void stopped() {

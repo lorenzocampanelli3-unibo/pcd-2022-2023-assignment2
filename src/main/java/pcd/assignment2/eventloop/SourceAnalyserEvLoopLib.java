@@ -5,6 +5,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import pcd.assignment2.common.AnalysisReport;
+import pcd.assignment2.common.AnalysisStatsNoLock;
 import pcd.assignment2.common.Flag;
 import pcd.assignment2.common.SourceLineParser;
 
@@ -14,14 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class SourceAnalyserLib implements SourceAnalyser {
+public class SourceAnalyserEvLoopLib implements SourceAnalyserEvLoop {
 
     private Vertx vertx;
     private Flag stopFlag;
 
 //    private SourceLineParser parser;
 
-    public SourceAnalyserLib(Vertx vertx, Flag stopFlag) {
+    public SourceAnalyserEvLoopLib(Vertx vertx, Flag stopFlag) {
         this.vertx = vertx;
         this.stopFlag = stopFlag;
 //        this.parser = new SourceLineParser();
@@ -30,7 +31,7 @@ public class SourceAnalyserLib implements SourceAnalyser {
     @Override
     public Future<AnalysisReport> getReport(Path rootDir, String[] extensions, int maxSourcesToTrack, int nBands, int maxLoC) {
         Promise<AnalysisReport> promise = Promise.promise();
-        AnalysisStats stats = new AnalysisStats(rootDir, maxSourcesToTrack, nBands, maxLoC);
+        AnalysisStatsNoLock stats = new AnalysisStatsNoLock(rootDir, maxSourcesToTrack, nBands, maxLoC);
         PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:**.{" + String.join(",", extensions) + "}");
         long t0 = System.currentTimeMillis();
         exploreForReport(rootDir, matcher, stats)
@@ -52,7 +53,7 @@ public class SourceAnalyserLib implements SourceAnalyser {
     }
 
 
-    private Future<Void> exploreForReport(Path directory, PathMatcher matcher, AnalysisStats stats) {
+    private Future<Void> exploreForReport(Path directory, PathMatcher matcher, AnalysisStatsNoLock stats) {
         Promise<Void> promise = Promise.promise();
         List<Future> futList = new ArrayList<>();
         var fs = vertx.fileSystem();

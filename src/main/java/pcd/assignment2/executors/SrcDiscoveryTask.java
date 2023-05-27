@@ -1,6 +1,7 @@
 package pcd.assignment2.executors;
 
 import pcd.assignment2.common.AnalysisReport;
+import pcd.assignment2.common.AnalysisStats;
 import pcd.assignment2.common.Flag;
 
 import java.io.IOException;

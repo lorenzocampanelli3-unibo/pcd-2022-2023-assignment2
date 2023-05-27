@@ -1,4 +1,4 @@
-package pcd.assignment2.eventloop;
+package pcd.assignment2.common;
 
 import pcd.assignment2.common.AnalysisStatsSnapshot;
 import pcd.assignment2.common.LocEntry;
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class AnalysisStats {
+public class AnalysisStatsNoLock {
 
 	// private final Lock lock = new ReentrantLock();
 
@@ -21,7 +21,7 @@ public class AnalysisStats {
 
 	private long nFoldersProcessed;
 	
-	public AnalysisStats(Path rootDir, int maxSourcesToTrack, int nBands, int maxLinesOfCode) {
+	public AnalysisStatsNoLock(Path rootDir, int maxSourcesToTrack, int nBands, int maxLinesOfCode) {
 		this.rootDir = rootDir;
 		maxLocSources = new LinkedList<>();
 		this.maxSourcesToTrack = maxSourcesToTrack;

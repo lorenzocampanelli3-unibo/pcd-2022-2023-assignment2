@@ -1,4 +1,4 @@
-package pcd.assignment2.executors.gui;
+package pcd.assignment2.virtualthreads.gui;
 
 import pcd.assignment2.common.AnalysisReport;
 import pcd.assignment2.common.AnalysisStatsSnapshot;
@@ -16,7 +16,7 @@ public class AnalyzerView implements AnalysisUpdateListener {
     private AnalyzerUI ui;
 
     public AnalyzerView(String defRootDir, int defMaxLoC, int defNBands, int defNTopFiles) {
-        this.ui = new AnalyzerUI("Executors", defRootDir, defMaxLoC, defNBands, defNTopFiles, 4, false);
+        this.ui = new AnalyzerUI("Virtual Threads", defRootDir, defMaxLoC, defNBands, defNTopFiles, 4, false);
     }
 
     public void addListener(InputListener listener) {

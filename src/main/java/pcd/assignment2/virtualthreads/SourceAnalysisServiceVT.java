@@ -1,10 +1,6 @@
 package pcd.assignment2.virtualthreads;
 
-import pcd.assignment2.common.AnalysisReport;
-import pcd.assignment2.common.AnalysisUpdateListener;
-import pcd.assignment2.common.AtomicBooleanFlag;
-import pcd.assignment2.common.Flag;
-import pcd.assignment2.executors.*;
+import pcd.assignment2.common.*;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -53,9 +49,12 @@ public class SourceAnalysisServiceVT implements SourceAnalyserVT {
         ScheduledFuture<?> updateTaskFuture = scheduledExecutorService.scheduleAtFixedRate(updateTask, 0, STATS_UPDATE_PERIOD, TimeUnit.MILLISECONDS);
         new Thread(() -> {
                     try {
-                       AnalysisReport report = getReport(rootDir, extensions, maxSourcesToTrack, nBands, maxLoC).get();
+//                       AnalysisReport report = getReport(rootDir, extensions, maxSourcesToTrack, nBands, maxLoC).get();
+                        CompletableFuture<AnalysisReport> reportFuture = new CompletableFuture<>();
+                        new VTMasterAgent(rootDir, new String[]{"java","c","h"}, stats, stopFlag, reportFuture).start();
+                        AnalysisReport report = reportFuture.get();
                         updateTaskFuture.cancel(false);
-                        boolean wasStopped = !stopFlag.isSet();
+                        boolean wasStopped = stopFlag.isSet();
                         listeners.forEach(l -> l.analysisCompleted(wasStopped, report));
                     } catch (InterruptedException | ExecutionException e) {
                         throw new RuntimeException(e);

@@ -6,12 +6,12 @@ import pcd.assignment2.common.Flag;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class CompletionWaiterAgent extends Thread {
+public class CompletionWaiterAgent__UNUSED extends Thread {
     ScheduledExecutorService listenersUpdater;
     List<AnalysisUpdateListener> listeners;
     Flag stopFlag;
 
-    public CompletionWaiterAgent(ScheduledExecutorService listenersUpdater, long listenersUpdatePeriod, List<AnalysisUpdateListener> listeners, Flag stopFlag) {
+    public CompletionWaiterAgent__UNUSED(ScheduledExecutorService listenersUpdater, long listenersUpdatePeriod, List<AnalysisUpdateListener> listeners, Flag stopFlag) {
         this.listenersUpdater = listenersUpdater;
         this.listeners = listeners;
         this.stopFlag = stopFlag;

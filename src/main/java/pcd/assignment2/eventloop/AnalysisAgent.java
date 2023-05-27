@@ -3,6 +3,7 @@ package pcd.assignment2.eventloop;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import pcd.assignment2.common.AnalysisReport;
+import pcd.assignment2.common.AnalysisStatsNoLock;
 import pcd.assignment2.common.Flag;
 import pcd.assignment2.eventloop.gui.AnalyzerView;
 
@@ -12,13 +13,13 @@ import java.nio.file.Paths;
 public class AnalysisAgent extends AbstractVerticle {
 
     private Path rootDir;
-    private AnalysisStats stats;
+    private AnalysisStatsNoLock stats;
     private String address;
     private Flag stopFlag;
     private AnalyzerView view;
 
     public AnalysisAgent(Path rootDir, int maxSourcesToTrack, int nBands, int maxLoC, String address, Flag stopFlag, AnalyzerView view) {
-        this.stats = new AnalysisStats(rootDir, maxSourcesToTrack, nBands, maxLoC);
+        this.stats = new AnalysisStatsNoLock(rootDir, maxSourcesToTrack, nBands, maxLoC);
         this.rootDir = rootDir;
         this.address = address;
         this.stopFlag = stopFlag;
@@ -50,7 +51,7 @@ public class AnalysisAgent extends AbstractVerticle {
         stopFlag.reset();
 
         long t0 = System.currentTimeMillis();
-        new SourceAnalyserLib(vertx, stopFlag)
+        new SourceAnalyserEvLoopLib(vertx, stopFlag)
                 .analyseSources(rootDir, new String[]{"java", "c", "h"}, address)
                 .onSuccess(h -> {
                     long t1 = System.currentTimeMillis();

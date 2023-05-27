@@ -1,5 +1,6 @@
-package pcd.assignment2.executors;
+package pcd.assignment2.common;
 
+import pcd.assignment2.common.AnalysisStats;
 import pcd.assignment2.common.AnalysisStatsSnapshot;
 import pcd.assignment2.common.AnalysisUpdateListener;
 

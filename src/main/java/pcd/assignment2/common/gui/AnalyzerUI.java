@@ -35,7 +35,10 @@ public class AnalyzerUI implements ActionListener {
 
     private List<InputListener> listeners;
 
-    public AnalyzerUI(String defRootDir, int defMaxLoC, int defNBands, int defNTopFiles, int defaultProcCoresMultiplier, boolean isProcCoresMultiplierInputAllowed) {
+    private String version;
+
+    public AnalyzerUI(String version, String defRootDir, int defMaxLoC, int defNBands, int defNTopFiles, int defaultProcCoresMultiplier, boolean isProcCoresMultiplierInputAllowed) {
+        this.version = version;
         this.listeners = new ArrayList<>();
 //        this.controller = controller;
         this.defaultProcCoresMultiplier = defaultProcCoresMultiplier;
@@ -234,7 +237,7 @@ public class AnalyzerUI implements ActionListener {
 
         //======== AnalyzerUI ========
         {
-            AnalyzerUI.setTitle("Source Code Analyzer - Executors Version");
+            AnalyzerUI.setTitle("Source Code Analyzer - " + version + " Version");
             AnalyzerUI.setResizable(false);
             AnalyzerUI.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             var AnalyzerUIContentPane = AnalyzerUI.getContentPane();

@@ -1,4 +1,4 @@
-package pcd.assignment2.reactive;
+package pcd.assignment2.common;
 
 import pcd.assignment2.common.AnalysisStatsSnapshot;
 import pcd.assignment2.common.LocEntry;

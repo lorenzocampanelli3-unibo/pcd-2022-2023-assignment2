@@ -1,7 +1,7 @@
 package pcd.assignment2.virtualthreads;
 
 import pcd.assignment2.common.SourceLineParser;
-import pcd.assignment2.executors.AnalysisStats;
+import pcd.assignment2.common.AnalysisStats;
 import pcd.assignment2.common.Flag;
 
 import java.io.IOException;

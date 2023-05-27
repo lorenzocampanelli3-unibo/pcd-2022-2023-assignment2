@@ -25,11 +25,11 @@ class CLIAgent extends AbstractVerticle {
     @Override
     public void start() throws Exception {
         Flag stopFlag = new AtomicBooleanFlag();
-        SourceAnalyserLib lib = new SourceAnalyserLib(this.getVertx(), stopFlag);
+        SourceAnalyserEvLoopLib lib = new SourceAnalyserEvLoopLib(this.getVertx(), stopFlag);
         this.getAndPrintReport(lib);
     }
 
-    private void getAndPrintReport(SourceAnalyser lib) {
+    private void getAndPrintReport(SourceAnalyserEvLoop lib) {
         lib.getReport(this.rootDir, new String[]{"java","c","h"}, this.maxSourcesToTrack, this.nBands, this.maxLoC)
                 .onSuccess(rep -> {
                     rep.dumpTopFilesRanking();
