@@ -1,6 +1,7 @@
 package pcd.assignment2.eventloop.gui;
 
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 import pcd.assignment2.common.AtomicBooleanFlag;
 import pcd.assignment2.common.Flag;
 import pcd.assignment2.common.gui.InputListener;
@@ -18,7 +19,9 @@ public class Controller implements InputListener {
 
 
     public Controller(AnalyzerView view) {
-        this.vertx = Vertx.vertx();
+        VertxOptions vertxOptions = new VertxOptions().setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 4);
+        this.vertx = Vertx.vertx(vertxOptions);
+//        this.vertx = Vertx.vertx();
         this.stopFlag = new AtomicBooleanFlag();
         this.view = view;
     }

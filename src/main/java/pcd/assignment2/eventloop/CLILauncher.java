@@ -2,6 +2,7 @@ package pcd.assignment2.eventloop;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 import pcd.assignment2.common.AtomicBooleanFlag;
 import pcd.assignment2.common.Flag;
 
@@ -56,7 +57,9 @@ public class CLILauncher {
         }
         System.out.println("Starting with params:\n" +
                 "rootDir = " + D + ", NI: " + NI + ", MAXL: " + MAXL + ", topN: " + topN);
-        Vertx vertx = Vertx.vertx();
+        VertxOptions vertxOptions = new VertxOptions().setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 4);
+        Vertx vertx = Vertx.vertx(vertxOptions);
+//        Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new CLIAgent(rootDir, topN, NI, MAXL));
 
 

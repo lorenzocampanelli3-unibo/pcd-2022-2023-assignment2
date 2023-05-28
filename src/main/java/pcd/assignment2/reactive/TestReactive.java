@@ -7,30 +7,31 @@ import java.nio.file.Paths;
 
 public class TestReactive {
     public static void main(String[] args) throws InterruptedException {
-//        String testPath = "E:\\linux-master";
-//        int maxSourcesToTrack = 15;
-//        int nBands = 21;
-//        int maxLoC = 5000;
-//        SourceAnalyserLib lib = new SourceAnalyserLib();
-//        lib.getReport(Paths.get(testPath), new String[]{"java", "c", "h"}, maxSourcesToTrack, nBands, maxLoC)
-//                .subscribe(r -> {
-//                    r.dumpTopFilesRanking();
-//                    r.dumpDistribution();
-//                    System.out.println("# dirs: " + r.getSnapshot().getNumDirectoriesProcessed());
-//                    System.out.println("# files: " + r.getSnapshot().getNumSourcesProcessed());
-//                    System.out.println("Elapsed time: " + r.getElapsedTime() + "ms.");
-//                });
-
         String testPath = "E:\\TestFolder3";
-        Flag stopFlag = new AtomicBooleanFlag();
-        SourceAnalyserRxLib lib = new SourceAnalyserRxLib(stopFlag);
-        var disposable = lib.analyseSources(Paths.get(testPath), new String[]{"java", "c", "h"})
-                .subscribe(ev -> {
-                    log("handler executed.");
-                    System.out.println("> " + ev);
+        int maxSourcesToTrack = 15;
+        int nBands = 21;
+        int maxLoC = 5000;
+        Flag stopFLag = new AtomicBooleanFlag();
+        SourceAnalyserRxLib lib = new SourceAnalyserRxLib(stopFLag);
+        lib.getReport(Paths.get(testPath), new String[]{"java", "c", "h"}, maxSourcesToTrack, nBands, maxLoC)
+                .subscribe(r -> {
+                    r.dumpTopFilesRanking();
+                    r.dumpDistribution();
+                    System.out.println("# dirs: " + r.getSnapshot().getNumDirectoriesProcessed());
+                    System.out.println("# files: " + r.getSnapshot().getNumSourcesProcessed());
+                    System.out.println("Elapsed time: " + r.getElapsedTime() + "ms.");
                 });
 
-        Thread.sleep(1000);
+//        String testPath = "E:\\TestFolder3";
+//        Flag stopFlag = new AtomicBooleanFlag();
+//        SourceAnalyserRxLib lib = new SourceAnalyserRxLib(stopFlag);
+//        var disposable = lib.analyseSources(Paths.get(testPath), new String[]{"java", "c", "h"})
+//                .subscribe(ev -> {
+//                    log("handler executed.");
+//                    System.out.println("> " + ev);
+//                });
+//
+//        Thread.sleep(1000);
 //        stopFlag.set();
 //        System.out.println("Before subscribe");
 //        System.out.println("Before Thread: " + Thread.currentThread());

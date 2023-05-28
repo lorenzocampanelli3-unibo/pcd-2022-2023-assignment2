@@ -1,8 +1,8 @@
 package pcd.assignment2.executors;
 
-public abstract class BasicAgent extends Thread {
+public abstract class BasicAgent__UNUSED extends Thread {
 
-	protected BasicAgent(String name) {
+	protected BasicAgent__UNUSED(String name) {
 		super(name);
 	}
 	

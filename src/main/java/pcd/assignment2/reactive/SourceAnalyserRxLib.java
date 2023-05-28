@@ -26,23 +26,15 @@ public class SourceAnalyserRxLib implements SourceAnalyserRx {
     public Observable<AnalysisReport> getReport(Path rootDir, String[] extensions, int maxSourcesToTrack, int nBands, int maxLoC) {
         AnalysisStats stats = new AnalysisStats(rootDir, maxSourcesToTrack, nBands, maxLoC);
         PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:**.{" + String.join(",", extensions) + "}");
-//        listFilesAndUpdateDirStats(rootDir, stats)
-//                .subscribeOn(Schedulers.io())
-//                .doOnNext(entry -> log(entry.toString()))
-//                .blockingSubscribe(r -> log("blockingSubscribe: " + r.toString()));
-//        exploreDir(rootDir)
-//                .doOnNext(p -> Files.isDirectory(p) ? stats.updateDirStats(): )
-//                .flatMap(p -> Files.isDirectory(p) ? {
-//                         exploreDir(p).subscribeOn(Schedulers.io())} : Observable.just(p))
-//                .blockingSubscribe(p -> {log("blockingSubscribe: " + p.toString());
-//                                         log("Dir count: " + stats.getSnapshot().getNumDirectoriesProcessed());});
         long t0 = System.currentTimeMillis();
         Observable.just(rootDir).mergeWith(collectDirectories(rootDir))
-//                .subscribeOn(Schedulers.io())
-                .doOnNext(d -> {/*log("New elem")*/; stats.updateDirStats();})
-                .flatMap(d -> matchingFilesInDirectory(d, matcher))
-                .map(f -> countLines(f))
-                .blockingSubscribe(pair -> stats.updateFileStats(pair.getX(), Math.toIntExact(pair.getY())));
+                .subscribeOn(Schedulers.io())
+                .doOnNext(d -> {/*log("New folder");*/ stats.updateDirStats();})
+                .flatMap(d -> {/*log("flatMap");*/ return matchingFilesInDirectory(d, matcher);})
+                .map(f -> {/*log("countLines");*/ return countLines(f);})
+                .blockingSubscribe(pair -> {/*log("blockingSubscribe handler");*/ stats.updateFileStats(pair.getX(), Math.toIntExact(pair.getY()));});
+//                .doOnNext(pair -> {/*log("blockingSubscribe handler");*/ stats.updateFileStats(pair.getX(), Math.toIntExact(pair.getY()));})
+//                .blockingSubscribe();
         long t1 = System.currentTimeMillis();
         return Observable.just(new AnalysisReport(stats.getSnapshot(), (t1-t0)));
     }
@@ -81,16 +73,7 @@ public class SourceAnalyserRxLib implements SourceAnalyserRx {
                                                                           return  notif;
                                                                         });
         return dirAnalysisStartedNotification.mergeWith(jsonStream).subscribeOn(Schedulers.io());
-    }
-
-    private Observable<Path> exploreDir(Path directory) {
-        Observable<Path> allFiles = Observable.create(emitter -> {
-            try(Stream<Path> stream = Files.list(directory)) {
-                stream.forEach(p -> emitter.onNext(p));
-            } catch (ClosedByInterruptException ignored) {}
-            emitter.onComplete();
-        });
-        return allFiles;
+//        return dirAnalysisStartedNotification.mergeWith(jsonStream).subscribeOn(Schedulers.computation());
     }
 
     private Observable<Path> collectDirectories(Path directory) {
@@ -103,10 +86,10 @@ public class SourceAnalyserRxLib implements SourceAnalyserRx {
 
         Observable<Path> directories =
                 allFiles
-                .filter(f -> Files.isDirectory(f));
+                .filter(f -> {/*log("collecting dir...");*/ return Files.isDirectory(f);});
         Observable<Path> allSubDirs =
                 directories
-                        .flatMap(d -> collectDirectories(d.toAbsolutePath()));
+                        .flatMap(d -> { return collectDirectories(d.toAbsolutePath());});
         return directories.mergeWith(allSubDirs).subscribeOn(Schedulers.io()); //TODO: Attenzione
 //        return directories.mergeWith(allSubDirs); //TODO: Attenzione
     }
@@ -145,33 +128,13 @@ public class SourceAnalyserRxLib implements SourceAnalyserRx {
             emitter.onComplete();
         });
 
-        Observable<Path> filesToBeExamined = allFiles.filter(f -> Files.isRegularFile(f) && matcher.matches(f));
+        Observable<Path> filesToBeExamined = allFiles.filter(f -> {/*log("matchingFilesInDirectory");*/ return Files.isRegularFile(f) && matcher.matches(f);});
         return filesToBeExamined.subscribeOn(Schedulers.io());
-    }
-    private Observable<Pair<Path, Long>> countLinesInFiles (Path directory, PathMatcher matcher) {
-        Observable<Path> allFiles = Observable.create(emitter -> {
-            try(Stream<Path> stream = Files.list(directory)) {
-                stream.forEach(p -> emitter.onNext(p));
-            } catch (ClosedByInterruptException ignored) {}
-            emitter.onComplete();
-        });
-
-        Observable<Path> filesToBeExamined = allFiles.filter(f -> Files.isRegularFile(f) && matcher.matches(f));
-        Observable<Pair<Path, Long>> locCountStream = filesToBeExamined
-                                                        .subscribeOn(Schedulers.io())
-                                                        .map(f -> countLines(f));
-        return locCountStream;
-    }
-
-    private List<Path> listFiles(Path directory) {
-        try(Stream<Path> stream = Files.list(directory)) {
-            return stream.toList();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     static private void log(String msg) {
-        System.out.println("[" + Thread.currentThread().getName() + "] " + msg);
+        synchronized (System.out) {
+            System.out.println("[" + Thread.currentThread().getName() + "] " + msg);
+        }
     }
 }

@@ -6,7 +6,7 @@ import pcd.assignment2.common.UpdateTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class AnalysisMasterAgent__UNUSED extends BasicAgent {
+public class AnalysisMasterAgent__UNUSED extends BasicAgent__UNUSED {
 
     private ExecutorService executor;
     private ScheduledExecutorService scheduledExecutorService;
